@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -49,6 +52,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _deviceName = '';
 
   void _incrementCounter() {
     setState(() {
@@ -61,8 +65,31 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<String> deviceName() async {
+    try {
+      final deviceInfoPlugin = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        final info = await deviceInfoPlugin.androidInfo;
+        return info.model;
+      } else if (Platform.isIOS) {
+        final info = await deviceInfoPlugin.iosInfo;
+        return info.name;
+      } else {
+        return 'unknown';
+      }
+    } catch (err) {
+      return 'unknown';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    deviceName().then((name) {
+      setState(() {
+        _deviceName = name;
+      });
+    });
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -95,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(_deviceName),
             const Text(
               'You have pushed the button this many times:',
             ),
