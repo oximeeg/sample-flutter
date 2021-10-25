@@ -2,16 +2,31 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+part 'main.freezed.dart';
+part 'main.g.dart';
+
+@freezed
+class DeviceInfo with _$DeviceInfo {
+  factory DeviceInfo({
+    required String name,
+  }) = _DeviceInfo;
+
+  // unused
+  factory DeviceInfo.fromJson(Map<String, Object?> json) =>
+      _$DeviceInfoFromJson(json);
+}
 
 final counterProvider = StateProvider.autoDispose((_) => 0);
 
 final deviceProvider =
-    StateNotifierProvider.autoDispose<DeviceNameState, AsyncValue<String>>(
+    StateNotifierProvider.autoDispose<DeviceNameState, AsyncValue<DeviceInfo>>(
   (ref) => DeviceNameState(),
 );
 
-class DeviceNameState extends StateNotifier<AsyncValue<String>> {
+class DeviceNameState extends StateNotifier<AsyncValue<DeviceInfo>> {
   DeviceNameState() : super(const AsyncValue.loading()) {
     _fetchDeviceName();
   }
@@ -21,7 +36,7 @@ class DeviceNameState extends StateNotifier<AsyncValue<String>> {
     try {
       await Future.delayed(const Duration(seconds: 1));
       final name = await DeviceUtils.deviceName();
-      state = AsyncValue.data(name);
+      state = AsyncValue.data(DeviceInfo(name: name));
     } on Exception catch (error) {
       state = AsyncValue.error(error);
     } catch (error) {
@@ -97,7 +112,9 @@ class _MyHomePageState extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(device is AsyncLoading ? 'loading' : device.value),
+            Text(
+              device is AsyncLoading ? 'loading' : device.value.name,
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
