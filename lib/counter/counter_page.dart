@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'device_info.dart';
-import 'device_name_state.dart';
+import 'device_utils.dart';
 
-final counterProvider = StateProvider.autoDispose((_) => 0);
+final counterProvider = StateProvider((ref) => 0);
 
-final deviceProvider =
-    StateNotifierProvider.autoDispose<DeviceNameState, AsyncValue<DeviceInfo>>(
-  (ref) => DeviceNameState(),
-);
+final deviceNameProvider = FutureProvider((ref) => DeviceUtils.deviceName());
 
 class CounterPage extends StatelessWidget {
   const CounterPage({Key? key}) : super(key: key);
@@ -23,8 +19,8 @@ class CounterPage extends StatelessWidget {
 class _CounterPageState extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider);
-    final device = ref.watch(deviceProvider);
+    final count = ref.watch(counterProvider);
+    final device = ref.watch(deviceNameProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,21 +30,25 @@ class _CounterPageState extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              device is AsyncLoading ? 'loading' : device.value.name,
+            device.when(
+              error: (error, stack) => const Text('Error'),
+              loading: () => const Text('loading'),
+              data: (device) {
+                return Text(device.toString());
+              },
             ),
             const Text(
               'You have pushed the button this many times:',
             ),
             Text(
-              '${counter.state}',
+              count.toString(),
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => counter.state++,
+        onPressed: () => ref.read(counterProvider.notifier).state++,
         child: const Icon(Icons.add),
       ),
     );

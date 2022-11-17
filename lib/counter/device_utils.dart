@@ -1,19 +1,20 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class DeviceUtils {
   DeviceUtils._();
 
   static Future<String> deviceName() async {
     try {
-      final deviceInfoPlugin = DeviceInfoPlugin();
+      await Future.delayed(const Duration(seconds: 3));
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       if (Platform.isAndroid) {
-        final info = await deviceInfoPlugin.androidInfo;
+        final info = await deviceInfo.androidInfo;
         return info.model;
       } else if (Platform.isIOS) {
-        final info = await deviceInfoPlugin.iosInfo;
-        return info.name;
+        final info = await deviceInfo.iosInfo;
+        return info.utsname.machine!;
       } else {
         return 'unknown';
       }
