@@ -51,3 +51,6 @@ app.*.map.json
 *.g.dart
 *.freezed.dart
 !packages/*/lib/**/*.freezed.dart
+
+# Bundler
+vendor

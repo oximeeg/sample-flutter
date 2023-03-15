@@ -13,5 +13,5 @@ fvm install
 fvm flutter pub get
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 
-BUNDLE_GEMFILE=ios/Gemfile bundle install
+BUNDLE_GEMFILE=Gemfile bundle install
 direnv allow .
