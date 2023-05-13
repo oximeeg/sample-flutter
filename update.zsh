@@ -22,7 +22,9 @@ cat .tool-versions | while read line; do
   tool=`echo $line | awk '{print $1}'`
   version=latest
   if [ "$tool" = "java" ]; then
-    version=`asdf list all java | grep corretto-11 | tail -n 1`
+    version=`asdf list all java | grep corretto-17 | tail -n 1`
+  elif [ "$tool" = "gradle" ]; then
+    version='7.5'
   elif [ "$tool" = "dart" ]; then
     version=$dart_version
   fi
@@ -37,15 +39,14 @@ done
 __println "asdf install"
 asdf install
 
-__println "activate fvm"
-dart pub global activate fvm
-
 __println "update dart"
 version=`cat .tool-versions | grep dart | awk '{print $2}'`
-sed -i '' -E "s/sdk: \">=[^ ]+ </sdk: \">=$version </" pubspec.yaml
+sed -i '' -E "s/sdk: .+ # dart/sdk: $version # dart/" pubspec.yaml
 
 __println "update package"
-fvm flutter pub upgrade
+fvm flutter pub upgrade --major-versions
+sed -i '' "s/: ^/: /g" pubspec.yaml
+rm -rf pubspec.lock
 
 __println "update cocoapods"
 version=`curl -s https://rubygems.org/api/v1/gems/cocoapods.json | grep -o '"version":"[^"]*' | grep -o '[^"]*$'`
