@@ -1,16 +1,38 @@
 # example
 
-A new Flutter project.
+# iOS build
 
-## Getting Started
+## Archive
 
-This project is a starting point for a Flutter application.
+```
+flutter clean && \
+flutter build ipa \
+  --release \
+  --obfuscate \
+  --split-debug-info=./build/split/ipa \
+  --dart-define-from-file=dart_defines/prod.json \
+  --no-codesign
+```
 
-A few resources to get you started if this is your first Flutter project:
+## export
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+xcodebuild \
+  -exportArchive \
+  -archivePath ./build/ios/archive/Runner.xcarchive \
+  -exportPath ./build/ios/ipa \
+  -exportOptionsPlist ./secrets/export_options.plist \
+  -allowProvisioningUpdates
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Android build
+
+```
+flutter clean && \
+flutter build appbundle \
+  --release \
+  --obfuscate \
+  --split-debug-info=./build/split/appbundle \
+  --dart-define-from-file=dart_defines/prod.json \
+  --build-number 1
+```

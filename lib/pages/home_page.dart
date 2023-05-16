@@ -33,7 +33,14 @@ class HomePage extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             device.when(
-              data: (device) => Text(device),
+              data: (device) {
+                return Column(children: [
+                  Text(device.flavor),
+                  Text(device.appName),
+                  Text(device.package),
+                  Text(device.deviceName),
+                ]);
+              },
               loading: () => const Text('loading'),
               error: (error, stack) => Text('$error'),
             ),
