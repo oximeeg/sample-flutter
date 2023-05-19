@@ -12,8 +12,8 @@ __print_warn() {
 }
 
 __println "update flutter"
-version=`fvm releases | grep stable | awk '{print $5}'`
-sed -i '' -E "s/\"flutterSdkVersion\": \"[^\"]+\"/\"flutterSdkVersion\": \"${version}\"/" .fvm/fvm_config.json
+flutter_Version=`fvm releases | grep stable | awk '{print $5}'`
+sed -i '' -E "s/\"flutterSdkVersion\": \"[^\"]+\"/\"flutterSdkVersion\": \"${flutter_Version}\"/" .fvm/fvm_config.json
 
 __println "fvm install"
 dart_version=`fvm install | grep Dart | awk '{print $4}'`
@@ -42,11 +42,13 @@ asdf install
 __println "update dart"
 version=`cat .tool-versions | grep dart | awk '{print $2}'`
 sed -i '' -E "s/sdk: .+ # dart/sdk: $version # dart/" pubspec.yaml
+sed -i '' -E "s/flutter: .+ # flutter/flutter: $flutter_Version # flutter/" pubspec.yaml
 
 __println "update package"
 fvm flutter pub upgrade --major-versions
 sed -i '' "s/: ^/: /g" pubspec.yaml
 rm -rf pubspec.lock
+fvm flutter pub get
 
 __println "update cocoapods"
 version=`curl -s https://rubygems.org/api/v1/gems/cocoapods.json | grep -o '"version":"[^"]*' | grep -o '[^"]*$'`
