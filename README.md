@@ -36,3 +36,15 @@ flutter build appbundle \
   --dart-define-from-file=dart_defines/prod.json \
   --build-number 1
 ```
+
+# Web build
+
+```
+flutter build web --release
+```
+
+# Deploy a Flutter Web App to Vercel
+
+- Build command: `flutter/bin/flutter pub get && flutter/bin/flutter pub run build_runner build --delete-conflicting-outputs && flutter/bin/flutter build web --release`
+- Output directory: `build/web`
+- Install command: `if cd flutter; then git pull && cd .. ; else git clone https://github.com/flutter/flutter.git --depth 1 -b stable; fi && ls && flutter/bin/flutter doctor && flutter/bin/flutter clean && flutter/bin/flutter config --enable-web`
