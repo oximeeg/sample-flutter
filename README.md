@@ -1,6 +1,10 @@
 # sample-flutter
 
 ```
+fvm releases
+```
+
+```
 fvm install && \
 yes | fvm use && \
 rm -rf sample && \
