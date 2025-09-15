@@ -9,7 +9,7 @@ init:
 update:
   zsh update.zsh
   rm -rf sample plugin
-  fvm install && yes | fvm use
+  yes && fvm install | fvm use
   just app
   just plugin
 
