@@ -10,7 +10,7 @@ update:
   zsh update.zsh
   rm -rf sample plugin
   fvm install
-  fvm use
+  yes | fvm use
   just app
   just plugin
 
