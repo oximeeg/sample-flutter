@@ -7,8 +7,7 @@ __println() {
 }
 
 __println "update flutter"
-flutter_version=`fvm releases | grep stable | tail -n 1`
-flutter_version=`echo $flutter_version | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" | awk '{print $4}'`
+flutter_version=3.38.10
 sed -i '' -E "s/\"flutter\": \"[^\"]+\"/\"flutter\": \"$flutter_version\"/" .fvmrc
 __println "$flutter_version"
 yes | fvm global $flutter_version
