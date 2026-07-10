@@ -7,7 +7,7 @@ __println() {
 }
 
 __println "update flutter"
-flutter_version=3.44.3
+flutter_version=3.44.4
 sed -i '' -E "s/\"flutter\": \"[^\"]+\"/\"flutter\": \"$flutter_version\"/" .fvmrc
 __println "$flutter_version"
 yes | fvm global $flutter_version
