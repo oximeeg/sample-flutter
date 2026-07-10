@@ -7,6 +7,7 @@ init:
   git clean -ffdx
 
 update:
+  just init
   zsh update.zsh
   rm -rf sample plugin
   fvm install
