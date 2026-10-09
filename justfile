@@ -8,21 +8,19 @@ init:
 
 update:
   just init
-  zsh update.zsh
   rm -rf sample plugin
-  fvm install
-  yes | fvm use
+  mise install
   just app
   just plugin
 
 app:
-  fvm flutter create \
+  flutter create \
     --org com.oximeeg \
     --project-name sample \
     sample
 
 plugin:
-  fvm flutter create \
+  flutter create \
     --org com.oximeeg \
     --template=plugin \
     --platforms=android,ios \
